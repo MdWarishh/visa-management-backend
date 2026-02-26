@@ -15,6 +15,10 @@ import candidateRoutes   from './routes/candidate.routes.js';
 
 const app = express();
 
+app.get("/", (req, res) => {
+  res.send("Visa Management Backend Running 🚀");
+});
+
 // ── Security ──────────────────────────────────────────
 app.use(helmet({
   contentSecurityPolicy: {
