@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  background: #fff;
+  color: #000;
+}
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 8mm 10mm;
+  position: relative;
+}
+
+/* ── TOP URL bar ── */
+.url-bar {
+  font-size: 9px;
+  color: #1a56db;
+  text-decoration: underline;
+  margin-bottom: 6px;
+}
+
+/* ── Header area: seal left, authority text right ── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.left-header { display: flex; align-items: center; gap: 10px; }
+
+.seal-circle {
+  width: 62px; height: 62px;
+  border: 2px solid #1a3060;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.seal-circle svg { width: 54px; height: 54px; }
+
+.state-label {
+  font-size: 9.5px;
+  font-weight: bold;
+  color: #1a3060;
+  line-height: 1.6;
+}
+
+.right-header {
+  text-align: right;
+  font-size: 9px;
+  color: #000;
+  line-height: 1.7;
+  max-width: 260px;
+}
+.right-header .hebrew { font-size: 10px; direction: rtl; }
+.right-header strong { font-size: 9.5px; }
+
+/* ── Decorative star top-right corner ── */
+.star-corner {
+  position: absolute;
+  top: 8mm; right: 10mm;
+  font-size: 22px;
+  color: #1a3060;
+  opacity: 0.85;
+}
+
+/* ── Letter number row ── */
+.letter-no {
+  font-size: 9px;
+  text-align: right;
+  direction: rtl;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+/* ── Issue + Expiry dates ── */
+.dates-bar {
+  display: flex;
+  justify-content: space-between;
+  border: 1.5px solid #1a3060;
+  border-radius: 2px;
+  padding: 5px 14px;
+  margin: 8px 0;
+  background: #f4f6fb;
+}
+.dates-bar span { font-size: 10.5px; font-weight: bold; color: #1a3060; }
+
+/* ── Visa Number row ── */
+.visa-no-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.visa-no-label { font-size: 13px; font-weight: bold; color: #000; }
+.visa-no-value { font-size: 15px; font-weight: bold; color: #c00000; letter-spacing: 1px; }
+
+/* ── Barcode placeholder ── */
+.barcode-box {
+  border: 1px solid #888;
+  padding: 3px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  background: #fff;
+}
+
+/* ── Red statement ── */
+.red-statement {
+  color: #c00000;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+/* ── "This is to confirm" ── */
+.confirm-line { font-size: 10px; margin-bottom: 4px; }
+
+/* ── WORK VISA ── */
+.visa-type-big {
+  font-size: 15px;
+  font-weight: bold;
+  color: #c00000;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+/* ── Details table ── */
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0;
+}
+.detail-table th, .detail-table td {
+  border: 1px solid #888;
+  padding: 5px 8px;
+  font-size: 10px;
+  text-align: center;
+}
+.detail-table thead tr { background: #dde3f0; }
+.detail-table thead th { font-weight: bold; }
+
+/* ── Hebrew address row ── */
+.heb-row {
+  border: 1px solid #888;
+  border-top: none;
+  padding: 5px 8px;
+  font-size: 10px;
+  text-align: right;
+  direction: rtl;
+  background: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+/* ── Body paragraphs ── */
+.para {
+  font-size: 10px;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+.para.heb {
+  text-align: right;
+  direction: rtl;
+  background: #f9f9f9;
+  border-right: 3px solid #1a3060;
+  padding-right: 7px;
+}
+
+/* ── Red validity line ── */
+.valid-line {
+  color: #c00000;
+  font-weight: bold;
+  font-size: 10px;
+  text-align: center;
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+/* ── Signature area ── */
+.sig-area {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  margin-top: 14px;
+  margin-bottom: 10px;
+}
+.sig-text { font-size: 10px; line-height: 1.6; }
+.sig-cursive {
+  font-family: 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: #1a3060;
+  margin-bottom: 2px;
+}
+.seal-small {
+  width: 58px; height: 58px;
+  border: 2px solid #1a3060;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7.5px; font-weight: bold; color: #1a3060;
+  text-align: center; padding: 6px; line-height: 1.4;
+}
+
+/* ── Footer ── */
+.footer {
+  border-top: 1px solid #ccc;
+  padding-top: 5px;
+  font-size: 8.5px;
+  color: #333;
+  line-height: 1.6;
+}
+.footer a { color: #1a56db; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- URL top -->
+  <div class="url-bar">https://www.piba-gov.il.info.israelgervisacheck.com/status.php</div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="left-header">
+      <!-- State of Israel Seal (Menorah SVG) -->
+      <div class="seal-circle">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="48" fill="none" stroke="#1a3060" stroke-width="2.5"/>
+          <!-- Menorah -->
+          <rect x="48" y="25" width="4" height="35" fill="#1a3060"/>
+          <rect x="28" y="30" width="3" height="20" fill="#1a3060"/>
+          <rect x="38" y="27" width="3" height="23" fill="#1a3060"/>
+          <rect x="58" y="27" width="3" height="23" fill="#1a3060"/>
+          <rect x="68" y="30" width="3" height="20" fill="#1a3060"/>
+          <line x1="28" y1="50" x2="72" y2="50" stroke="#1a3060" stroke-width="2.5"/>
+          <!-- Horizontal arms -->
+          <line x1="30" y1="37" x2="50" y2="37" stroke="#1a3060" stroke-width="2"/>
+          <line x1="50" y1="37" x2="70" y2="37" stroke="#1a3060" stroke-width="2"/>
+          <line x1="40" y1="32" x2="50" y2="32" stroke="#1a3060" stroke-width="1.5"/>
+          <line x1="50" y1="32" x2="60" y2="32" stroke="#1a3060" stroke-width="1.5"/>
+          <!-- Base -->
+          <rect x="38" y="60" width="24" height="4" fill="#1a3060"/>
+          <rect x="43" y="55" width="14" height="5" fill="#1a3060"/>
+          <!-- Olive branches text -->
+          <text x="50" y="80" text-anchor="middle" font-size="6.5" fill="#1a3060" font-style="italic">מדינת ישראל</text>
+        </svg>
+      </div>
+      <div class="state-label">מדינת ישראל<br>State of Israel</div>
+    </div>
+
+    <div class="right-header">
+      <div class="hebrew">רשות האוכלוסין וההגירה</div>
+      Population &amp; Immigration Authority<br>
+      <div class="hebrew">שאל להנגי מינניו בירו</div>
+      Foreign Worker Administration Director<br><br>
+      <div class="hebrew">הנפקה תאריך :נפרט דבועה</div>
+      <div class="hebrew">לארשי א לדיבורת ל רחאל</div>
+      <strong>הנפקה תאריך: {{VISA_ISSUE_DATE}}</strong><br>
+      <div class="hebrew">שדר'פ ל :רמ/תרמ</div>
+    </div>
+  </div>
+
+  <!-- Decorative star -->
+  <div class="star-corner">✡</div>
+
+  <!-- Letter number -->
+  <div class="letter-no">מסמך מספר : 25CC252208</div>
+  <div class="letter-no" style="text-align:right; direction:rtl; margin-bottom:6px;">
+    ס"א מהבתכ רפסמ :
+  </div>
+
+  <!-- Issue + Expiry dates bar -->
+  <div class="dates-bar">
+    <span>Visa Issue Date:-{{VISA_ISSUE_DATE}}</span>
+    <span>Expiry Date:-{{VISA_EXPIRY_DATE}}</span>
+  </div>
+
+  <!-- Visa number row -->
+  <div class="visa-no-row">
+    <div>
+      <span class="visa-no-label">Visa No </span>
+      <span class="visa-no-value">{{VISA_NUMBER}}</span>
+    </div>
+    <div class="barcode-box">{{VISA_NUMBER}}</div>
+  </div>
+
+  <!-- Red statement -->
+  <div class="red-statement">
+    This document provides an entry permit to the State of Israel and<br>
+    Replacing an entry visa
+  </div>
+
+  <!-- Confirm line -->
+  <div class="confirm-line">This is to confirm that</div>
+
+  <!-- Visa Type big red -->
+  <div class="visa-type-big">{{VISA_TYPE}}</div>
+
+  <!-- Details table: Name | Passport | Profession | Company -->
+  <table class="detail-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Passport No#</th>
+        <th>Profession</th>
+        <th>Company Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{FULL_NAME}}</td>
+        <td>{{PASSPORT_NUMBER}}</td>
+        <td>{{PROFESSION}}</td>
+        <td>{{COMPANY}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Hebrew row below table -->
+  <div class="heb-row">
+    תרבת תצוגק פורטשא לארשי &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; א. הדילך: "{{DOB}}"
+  </div>
+
+  <!-- Body English -->
+  <div class="para">
+    .לארשי תנידמל ודיי ,ויתוסיטב/ויתוסיטל ,ביניגמ יחמשמ יתשמ ויחמשמ ידכ<br>
+    May board his/her their flights, on his/her their way to the State of Israel.
+  </div>
+
+  <div class="para">
+    This permit letter is based on the statement of the above-mentioned passenger/s
+    that he/she/they is/are aware of his/her/their obligations in Israel:
+  </div>
+
+  <!-- Hebrew body -->
+  <div class="para heb">
+    בוט אוה הפנסה דעקמ 90 למשמ הפח תה הן הדיוה הנינבב<br>
+    דלבל הפח הכמ הנינקה עברו
+  </div>
+
+  <!-- Red validity -->
+  <div class="valid-line">
+    This permit letter is valid for 90 days from the date of issue and is<br>
+    good For one entry only
+  </div>
+
+  <!-- Hebrew legal block -->
+  <div class="para heb">
+    קסומסתכביתיה<br>
+    שדירחכב דיבות תא קיות אב ,דניצ יחמשמ יתשמ ויחמשמ אמיחמ ויחמשמ אצממ<br>
+    וביישעלו אי יבוסיס שדשמ הקשה מסטוב (1) דיש הקשמ פרושיוק פרסמה הקינקה אי ד-ב.<br>
+    הדיבות הכב הנינב ביוח יחמשמ .(שאנ ,שאנ) ,סמב הנינב ביוח יחמשמ אצממ ויחמשמ<br>
+    .פרמישאגה הזגה וז הל פרשיחה ויז גול הדיבות אי הל
+  </div>
+
+  <!-- Signature -->
+  <div class="sig-area">
+    <div>
+      <div class="sig-cursive">David Dama</div>
+      <div class="sig-text">
+        <strong>David Dama</strong><br>
+        Foreign Workers Administration Director
+      </div>
+    </div>
+    <div class="seal-small">
+      STATE<br>OF<br>ISRAEL<br>✡<br>OFFICIAL
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    .תולאתגה ,הינגרה ,תוינדיה ,הרוצה ,טניינייפ מפנפ מינ ירשומיד יתנחות הנחות A1/ב-B<br>
+    B1/Work Visas are granted to foreign workers in the industry, welfare, construction, and agriculture sectors.<br>
+    <a href="https://www.piba-gov.il.info.israelgervisacheck.com/status.php">
+      https://www.piba-gov.il.info.israelgervisacheck.com/status.php
+    </a>
+  </div>
+
+</div>
+</body>
+</html>
