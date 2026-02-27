@@ -6,7 +6,10 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import logger from './utils/logger.js';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 import authRoutes        from './routes/auth.routes.js';
 import superAdminRoutes  from './routes/superAdmin.routes.js';
@@ -14,10 +17,6 @@ import userRoutes        from './routes/user.routes.js';
 import candidateRoutes   from './routes/candidate.routes.js';
 
 const app = express();
-
-app.get("/", (req, res) => {
-  res.send("Visa Management Backend Running 🚀");
-});
 
 // ── Security ──────────────────────────────────────────
 app.use(helmet({
@@ -60,7 +59,10 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // ── Block direct file access ──────────────────────────
-app.use('/uploads',         (req, res) => res.status(403).json({ message: 'Forbidden' }));
+// Photos — accessible (for admin panel preview)
+app.use('/uploads/photos', express.static(join(__dirname, 'uploads/photos')));
+// Visa docs served via API route (not directly)
+app.use('/uploads', (req, res) => res.status(403).json({ message: 'Forbidden' }));
 app.use('/generated-visas', (req, res) => res.status(403).json({ message: 'Forbidden' }));
 
 // ── Health ────────────────────────────────────────────

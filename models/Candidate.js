@@ -16,8 +16,12 @@ const candidateSchema = new mongoose.Schema({
     index: true,
   },
 
-  // EXACT FIELDS FROM SCREENSHOT
-  passportNumber:  { type: String, required: true, uppercase: true, trim: true },
+  // IDENTIFIER TYPE: 'passport' | 'control'
+  identifierType: { type: String, enum: ['passport', 'control'], default: 'passport' },
+
+  // CORE FIELDS — null when not used (not '' — avoids unique index conflicts)
+  passportNumber:  { type: String, default: null, uppercase: true, trim: true, sparse: true },
+  controlNumber:   { type: String, default: null, uppercase: true, trim: true, sparse: true },
   visaNumber:      { type: String, default: '', trim: true },
   fullName:        { type: String, required: true, trim: true },
   dateOfBirth:     { type: Date,   required: true },
@@ -41,8 +45,10 @@ const candidateSchema = new mongoose.Schema({
   // Applicant photo
   photo: { type: String, default: null },
 
-  // Generated PDF
-  finalVisaPdf: { type: String, default: null },
+  // Admin-uploaded visa document (image OR pdf)
+  visaDocument:     { type: String, default: null },
+  visaDocumentType: { type: String, default: null },
+  visaDocumentName: { type: String, default: null },
 
   // History & logs
   statusHistory: [statusHistorySchema],
@@ -54,10 +60,14 @@ const candidateSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
+// ── Indexes ──────────────────────────────────────────
 candidateSchema.index({ adminId: 1, isDeleted: 1 });
 candidateSchema.index({ adminId: 1, status: 1 });
-candidateSchema.index({ adminId: 1, passportNumber: 1 }, { unique: true });
+// applicationNumber unique per admin
 candidateSchema.index({ adminId: 1, applicationNumber: 1 }, { unique: true });
+// sparse indexes for passport/control — null values are ignored (no conflict)
+candidateSchema.index({ passportNumber: 1 }, { sparse: true });
+candidateSchema.index({ controlNumber: 1 },  { sparse: true });
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
 export default Candidate;
